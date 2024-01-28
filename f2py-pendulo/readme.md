@@ -37,3 +37,7 @@ Com isso em mente, estou iniciando o processo de reescrita e exploração dessa 
 ---
 ## Comentários
   * O tempo de execução do código para uma resolução de $512 \times 512$, utilizando tanto o método tradicional do FTLE como o cálculo do quadrado da distância máxima para o caso do pêndulo simples foi respectivamente _10 minutos 43 segundos_, e _10 minutos e 30 segundos_ para _15  unidades de tempo (u.t.)_, com passo de tempo de _0.02 u.t._
+  * É perceptivel através da [figura 1] que o método utilizando o FTLE é relativamente melhor para encontrar LCS, porém a [figura 2] mostra como o método das Distâncias Máximas é uma excelente aproximação do FTLE.
+
+[figura 1]: https://github.com/lesivieri/f2py-codes/blob/main/f2py-pendulo/pend_simples_2_512.png
+[figura 2]: https://github.com/lesivieri/f2py-codes/blob/main/f2py-pendulo/pend_simples_512.png
