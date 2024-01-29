@@ -32,6 +32,27 @@ Com isso em mente, estou iniciando o processo de reescrita e exploração dessa 
 ---
  ## Métodos Matemáticos
  ### Runge-Kutta de 4º Ordem - RK4
+
+  Este método é um dos mais populares e eficazes para resolver equações diferenciais ordinários (EDOs). Considere
+  $$\frac{dy}{dx} = f(x,y)$$
+  onde $y$ é uma função de $x$ e, $f(x,y)$ é uma função dque descreve a taxa de variação de $y$ em relação a $x$.
+  #### Método:
+   * Defina um tamanho de passo $h$ e $y_0$
+   * Para cada $x_i$ ao logo do intervalo calculando as inclinações em quatro pontos diferentes, i.e, $k_1$, $k_2$, $k_3$, $k_4$, usando cada uma das iterações anteriores para calcular a próxima.
+     <p align="center">
+      <img src="" alt="rk4" width="200">
+     </p>
+   * Atualize o valor $y$ usando a média ponderada das inclinações.
+   * Repita os passos acima de $t_0 \rightarrow T$
+     
+     $$k_1 = hf(x_i, y_i)$$
+     $$k_2 = hf\left(x_i + \frac{h}{2}, y_i + \frac{k_1}{2}\right)$$
+     $$k_3 = hf\left(x_i + \frac{h}{2}, y_i + \frac{k_2}{2}\right)$$
+     $$k_4 = hf(x_i + h, y_i + k_3)$$
+     $$y_{i+1} = y_i + \frac{1}{6}(k_1 + 2k_2 + 2k_3 + k_4)$$
+
+   * Onde ($x_i$, $y_i$) reprsenta o ponto atual, e ($x_{i+1}$, $y_{i+1}$) representa o próximo ponto.
+ 
  ### Expoente de Lyapunov de Tempo Finito - FTLE ( _Finite Time Lyapunov Exponent_ )
 
    O Expoente de Lyapunov de Tempo Finito (FTLE) é um operador escalar utilizado para medir a taxa média de separação ou aproximação entre órbitas vizinhas de $\mathbf{x}$ durante um terminado tempo $T$, de mesmo modo como é representado na figura abaixo:
