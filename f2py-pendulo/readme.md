@@ -33,9 +33,22 @@ Com isso em mente, estou iniciando o processo de reescrita e exploração dessa 
  ## Métodos Matemáticos
  ### Runge-Kutta de 4º Ordem - RK4
  ### Expoente de Lyapunov de Tempo Finito - FTLE ( _Finite Time Lyapunov Exponent_ )
+
+   O Expoente de Lyapunov de Tempo Finito (FTLE) é um operador escalar utilizado para medir a taxa média de separação ou aproximação entre órbitas vizinhas de $\mathbf{x}$ durante um terminado tempo $T$, de mesmo modo como é representado na figura abaixo:
+   <p align="center">
+         <img src="https://github.com/lesivieri/f2py-codes/blob/main/f2py-pendulo/ftle-representacao.png" alt="ftle-repsetacao">
+   </p>
+   
+   Para calcular o expoente de lyapunov em um ponto $\mathbf{x}$ para um determinado intervalo de tempo finito, i.e, $t_0 \rightarrow T$ , é expresso na forma:
+   $$\sigma_{t_0}^{t_0+T}(\mathbf{x}) = \frac{ln(\sqrt{\lambda_{max}(\Delta)})}{|T|}$$
+   onde a matriz
+   $$\Delta=[D\phi_{t_0}^{t_0+T}(\mathbf{x})]^{*}D\phi_{t_0}^{t_0+T}(\mathbf{x})$$
+   é uma versão do tensor de deformação de Cauchy-Green para um tempo finito, e $\lambda_{max}(\Delta)$ representa o máximo autovalor desta matriz.
+    
+ 
  ### Cálculo do Quadrado da Distância Máxima
  
-   Diferentemente do FTLE, esse método calcula-se o quadrado da distância máxima de um ponto central em relação aos seus vizinhos. 
+   O propósito desse método nesse caso é o mesmo do FTLE, porém, diferentemente do método anterior, este calcula-se o quadrado da distância máxima de um ponto central em relação aos seus vizinhos. 
    
    A distância entre dois pontos em um espaço Euclidiano é a medida da magnitude do vetor que conecta esses dois pontos. No caso de dois pontos $(x_1,y_1)$ e $(x_2,y_2)$ em um plano 2D, a distância entre eles podem ser calculada usando a distância euclidina na forma: 
    $$\sqrt{ (x_2 - x_1)^2 + (y_2 - y_1)^2 }$$
@@ -46,7 +59,13 @@ Com isso em mente, estou iniciando o processo de reescrita e exploração dessa 
 ---
 ## Comentários
   * O tempo de execução do código para uma resolução de $512 \times 512$, utilizando tanto o método tradicional do FTLE como o cálculo do quadrado da distância máxima para o caso do pêndulo simples foi respectivamente _10 minutos 43 segundos_, e _10 minutos e 30 segundos_ para _15  unidades de tempo (u.t.)_, com passo de tempo de _0.02 u.t._
-  * É perceptivel através da [figura 1] que o método utilizando o FTLE é relativamente melhor para encontrar LCS, porém a [figura 2] mostra como o método das Distâncias Máximas é uma excelente aproximação do FTLE.
+  * É perceptivel através da [figura 1] (_esquerda_) que o método utilizando o FTLE é relativamente melhor para encontrar LCS, porém a [figura 2] (_direita_) mostra como o método das Distâncias Máximas é uma excelente aproximação do FTLE.
+    <p align="center">
+     <img src="https://github.com/lesivieri/f2py-codes/blob/main/f2py-pendulo/pend_simples_2_512.png" width="400" title="figura 1">
+     <img src="https://github.com/lesivieri/f2py-codes/blob/main/f2py-pendulo/pend_simples_512.png" width="400" title="figura 2"> 
+    </p>
+
+
 
 [figura 1]: https://github.com/lesivieri/f2py-codes/blob/main/f2py-pendulo/pend_simples_2_512.png
 [figura 2]: https://github.com/lesivieri/f2py-codes/blob/main/f2py-pendulo/pend_simples_512.png
