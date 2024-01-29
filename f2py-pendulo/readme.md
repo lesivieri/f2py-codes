@@ -40,7 +40,7 @@ Com isso em mente, estou iniciando o processo de reescrita e exploração dessa 
    * Defina um tamanho de passo $h$ e $y_0$
    * Para cada $x_i$ ao logo do intervalo calculando as inclinações em quatro pontos diferentes, i.e, $k_1$, $k_2$, $k_3$, $k_4$, usando cada uma das iterações anteriores para calcular a próxima.
      <p align="center">
-      <img src="" alt="rk4" width="200">
+      <img src="https://github.com/lesivieri/f2py-codes/blob/main/f2py-pendulo/RK4.png" alt="rk4" width="400">
      </p>
    * Atualize o valor $y$ usando a média ponderada das inclinações.
    * Repita os passos acima de $t_0 \rightarrow T$
