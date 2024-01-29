@@ -30,10 +30,19 @@ Com isso em mente, estou iniciando o processo de reescrita e exploração dessa 
         rk4library.rk4(...)
         ```
 ---
-## Métodos Matemáticos
-### Runge-Kutta de 4º Ordem - RK4
-### Expoente de Lyapunov de Tempo Finito - FTLE ( _Finite Time Lyapunov Exponent_ )
-### Cálculo do Quadrado da Distância Máxima
+ ## Métodos Matemáticos
+ ### Runge-Kutta de 4º Ordem - RK4
+ ### Expoente de Lyapunov de Tempo Finito - FTLE ( _Finite Time Lyapunov Exponent_ )
+ ### Cálculo do Quadrado da Distância Máxima
+ 
+   Diferentemente do FTLE, esse método calcula-se o quadrado da distância máxima de um ponto central em relação aos seus vizinhos. 
+   
+   A distância entre dois pontos em um espaço Euclidiano é a medida da magnitude do vetor que conecta esses dois pontos. No caso de dois pontos $(x_1,y_1)$ e $(x_2,y_2)$ em um plano 2D, a distância entre eles podem ser calculada usando a distância euclidina na forma: 
+   $$\sqrt{ (x_2 - x_1)^2 + (y_2 - y_1)^2 }$$
+
+   Em resumo o quadro da distância máxima é uma medida de dispersão dos pontos em um conjunto de dados em relação a um ponto central específico, podendo ser útil em análises estatísticas e de dados, sendo expressa na forma:
+   $$\delta_{t_0}^{t_0 + T}(\mathbf{x}) = \frac{1}{T} log\left(max \frac{||\phi_{t_0}^{t_0+T}(\mathbf{x})-\phi_{t_0}^{t_0+T}(n_{j}(\mathbf{x}))||}{||\mathbf{x}-n_{j}(\mathbf{x})||}\right)$$
+   
 ---
 ## Comentários
   * O tempo de execução do código para uma resolução de $512 \times 512$, utilizando tanto o método tradicional do FTLE como o cálculo do quadrado da distância máxima para o caso do pêndulo simples foi respectivamente _10 minutos 43 segundos_, e _10 minutos e 30 segundos_ para _15  unidades de tempo (u.t.)_, com passo de tempo de _0.02 u.t._
