@@ -1,5 +1,7 @@
       SUBROUTINE rkf78(NX,X,T,TOUT,RELERR,ABSERR,IFLAG,WORK,DT)
-
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      ! É NECESSÁRIO INFORMAR AQUI E NO CÓDIGO PRINCIPAL A QUANTIDADE DE EQUAÇÕES NO VALOR NEQN, BEM COMO O TAMANHO DO VETOR X, WORK, RELERR, ABSERR, DXDY
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       !INTEGER :: NEQN = 2
       INTEGER, INTENT(IN) :: NX
       INTEGER :: NEQN = 2
@@ -42,11 +44,8 @@
             END SUBROUTINE derivs
       END INTERFACE TESTE
       
-      !WRITE(*,*)'entrou'
-
       IF (IFLAG.NE.1) GO TO 5
-      !WRITE(*,*)'entrou'
-
+      
       MAXREJ = 10
       DTINC = 20.D0
       DTDEC = 0.025D0
@@ -199,58 +198,40 @@
       DO NEQ = 1, NEQN
             DXDY(NEQ)=0.0
       END DO
-      !WRITE(*,*)'entrou 199'
-
       DTFIX = .FALSE.
-      !DO 10 NEQ = 1,NEQN
       DO NEQ = 1,N
-        !WRITE(*,*)'entrou 203', NEQ, ABSERR(NEQ),RELERR(NEQ)
         IF(ABSERR(NEQ).EQ.0.0D0.AND.RELERR(NEQ).EQ.0.0D0)THEN
            DTFIX = .TRUE.
-           !WRITE(*,*)'entrou 205'
         END IF
       END DO
-      !write (*,*) 'entrou 210'
-  !10  CONTINUE
-      !WRITE(*,*)'entrou 207'
       DTOLD = DT
   20  DTFAIL = .FALSE.
       NREJ = 0
       DELT = TOUT-T
       IF (abs(DT).LT.abs(DELT)) GO TO 25
       DT = DELT
-      !WRITE(*,*)'entrou 213'
       GO TO 30
   25  IF (abs(DT+DT).LT.abs(DELT)) GO TO 30
       DT = DELT/2.D0
-      !WRITE(*,*)'entrou 216'
-      !READ(*,*)BOBO
-
-
   30  IF(abs(DT).LT.1.D-15*abs(T)) GO TO 160
-
-      !WRITE(*,*)'entrou 229'
       T0 = T
       DO 35 NEQ = 1,N
         WORK(NEQ) = X(NEQ)
   35  CONTINUE
-      !CALL derivs(T,X,WORK(N1+1))
       CALL derivs(T,X,DXDY)
       DO NEQ = 1,N
             WORK(N1+NEQ) = DXDY(NEQ)
-      ENDDO
-
+      END DO
 
   40  T = T0+A1*DT
       D0 = B10*DT
       DO 45 NEQ = 1,N
         X(NEQ) = D0*WORK(N1+NEQ)+WORK(NEQ)
   45  CONTINUE
-      !CALL derivs(T,X,WORK(N2+1))
       CALL derivs(T,X,DXDY)
       DO NEQ = 1,N
             WORK(N2+NEQ) = DXDY(NEQ)
-      ENDDO
+      END DO
 
       T = T0+A2*DT
       D0 = B20*DT
@@ -258,11 +239,10 @@
       DO 50 NEQ = 1,N
         X(NEQ) = D0*WORK(N1+NEQ)+D1*WORK(N2+NEQ)+WORK(NEQ)
   50  CONTINUE
-      !CALL derivs(T,X,WORK(N3+1))
       CALL derivs(T,X,DXDY)
       DO NEQ = 1,N
             WORK(N3+NEQ) = DXDY(NEQ)
-      ENDDO
+      END DO
       T = T0+A3*DT
       D0 = B30*DT
       D1 = B31*DT
@@ -273,9 +253,7 @@
       CALL derivs(T,X,DXDY)
       DO NEQ = 1,N
             WORK(N4+NEQ) = DXDY(NEQ)
-      ENDDO
-      !CALL derivs(T,X,WORK(N4+1))
-
+      END DO
 
       T = T0+A4*DT
       D0 = B40*DT
@@ -285,7 +263,6 @@
       DO 60 NEQ = 1,N
         X(NEQ) = D0*WORK(N1+NEQ)+D1*WORK(N2+NEQ)+D2*WORK(N3+NEQ)+D3*WORK(N4+NEQ)+WORK(NEQ)
   60  CONTINUE
-      !CALL derivs(T,X,WORK(N5+1))
       CALL derivs(T,X,DXDY)
       DO NEQ = 1,N
             WORK(N5+NEQ) = DXDY(NEQ)
@@ -300,12 +277,10 @@
       DO 65 NEQ = 1,N
         X(NEQ) = D0*WORK(N1+NEQ)+D1*WORK(N2+NEQ)+D2*WORK(N3+NEQ)+D3*WORK(N4+NEQ)+D4*WORK(N5+NEQ)+WORK(NEQ)
   65  CONTINUE
-      !CALL derivs(T,X,WORK(N6+1))
       CALL derivs(T,X,DXDY)
       DO NEQ = 1,N
             WORK(N6+NEQ) = DXDY(NEQ)
-      ENDDO
-
+      END DO
       T = T0+A6*DT
       D0 = B60*DT
       D1 = B61*DT
@@ -321,8 +296,7 @@
       CALL derivs(T,X,DXDY)
       DO NEQ = 1,N
             WORK(N7+NEQ) = DXDY(NEQ)
-      ENDDO
-      !CALL derivs(T,X,WORK(N7+1))
+      END DO
       T = T0+A7*DT
       D0 = B70*DT
       D1 = B71*DT
@@ -339,11 +313,7 @@
       CALL derivs(T,X,DXDY)
       DO NEQ = 1,N
             WORK(N8+NEQ) = DXDY(NEQ)
-            !WRITE(*,*) 'DXDY=',DXDY,'N8=',WORK(N8+NEQ)
-      ENDDO
-      !CALL derivs(T,X,WORK(N8+1))
-      !READ(*,*)BOBO
-
+      END DO
       T = T0+A8*DT
       D0 = B80*DT
       D1 = B81*DT
@@ -358,11 +328,10 @@
                & D3*WORK(N4+NEQ)+D4*WORK(N5+NEQ)+D5*WORK(N6+NEQ)+ &
                & D6*WORK(N7+NEQ)+D7*WORK(N8+NEQ)+WORK(NEQ)
   80  CONTINUE
-      !CALL derivs(T,X,WORK(N9+1))
       CALL derivs(T,X,DXDY)
       DO NEQ = 1,N
             WORK(N9+NEQ) = DXDY(NEQ)
-      ENDDO
+      END DO
 
       T = T0+A9*DT
       D0 = B90*DT
@@ -380,11 +349,10 @@
                & D6*WORK(N7+NEQ)+D7*WORK(N8+NEQ)+D8*WORK(N9+NEQ)+ &
                & WORK(NEQ)
   85  CONTINUE
-      !CALL derivs(T,X,WORK(N10+1))
       CALL derivs(T,X,DXDY)
       DO NEQ = 1,N
             WORK(N10+NEQ) = DXDY(NEQ)
-      ENDDO
+      END DO
       T = T0+A10*DT
       D0 = B100*DT
       D1 = B101*DT
@@ -402,11 +370,10 @@
                &  D6*WORK(N7+NEQ)+D7*WORK(N8+NEQ)+D8*WORK(N9+NEQ)+ &
                &  D9*WORK(N10+NEQ)+WORK(NEQ)
   90  CONTINUE
-      !CALL derivs(T,X,WORK(N11+1))
       CALL derivs(T,X,DXDY)
       DO NEQ = 1,N
             WORK(N11+NEQ) = DXDY(NEQ)
-      ENDDO
+      END DO
 
       T = T0+A11*DT
       D0 = B110*DT
@@ -429,9 +396,8 @@
       CALL derivs(T,X,DXDY)
       DO NEQ = 1,N
             WORK(N12+NEQ) = DXDY(NEQ)
-      ENDDO
-      !CALL derivs(T,X,WORK(N12+1))
-
+      END DO
+      
       T = T0+A12*DT
       D0 = B120*DT
       D1 = B121*DT
@@ -455,9 +421,8 @@
       CALL derivs(T,X,DXDY)
       DO NEQ = 1,N
             WORK(N13+NEQ) = DXDY(NEQ)
-      ENDDO
-      !CALL derivs(T,X,WORK(N13+1))
-
+      END DO
+      
       D0 = CH0*DT
       D1 = CH1*DT
       D2 = CH2*DT
@@ -517,8 +482,6 @@
  120  CONTINUE
       T = T0
       IFLAG = 7
-      !WRITE(*,*) 'IFLAG= ', IFLAG
-      !READ(*,*) BOBO
       RETURN
  130  PCT = DTDEC
       IF (RTE.LT.BUP)THEN
@@ -535,9 +498,6 @@
       IF (abs(TOUT-T).GT.1.0D-15) GO TO 150
       DT = DTOLD
       IFLAG = 2
-      !WRITE(*,*) 'IFLAG= ',IFLAG,'T=',T,'DT=',DT,'DTOLD=',DTOLD
-      !WRITE(*,*)'x1=',X(1),'x2=',X(2)
-      !READ(*,*) BOBO
       RETURN
  150  IF (DTFIX) GO TO 20
       PCT = DTINC
@@ -556,7 +516,6 @@
  160  IF (abs(DELT).GT.abs(DT)) GO TO 180
 
       CALL derivs(T,X,DXDY)
-      !CALL derivs(T,X,WORK(N1+1))
       DO NEQ = 1,N
             WORK(N1+NEQ) = DXDY(NEQ)
       ENDDO
@@ -566,12 +525,8 @@
       T = T+DT
       DT = DTOLD
       IFLAG = 2
-      !WRITE(*,*) 'IFLAG= ',IFLAG,'T=',T,'DT=',DT,'DTOLD=',DTOLD
-      !READ(*,*) BOBO
       RETURN
  180  IFLAG = 8
-      !WRITE(*,*) 'IFLAG= ', IFLAG
-      !READ(*,*) BOBO
       RETURN
 
       END SUBROUTINE rkf78
@@ -580,11 +535,7 @@
             REAL(8), DIMENSION(2), INTENT(IN) :: xi
             REAL(8), DIMENSION(2), INTENT(OUT) :: xf
             REAL(8), INTENT(IN) :: time
-            INTEGER :: BOBO
-
-            !WRITE(*,*) 'ENTROU DERIVS', time
-            !READ(*,*)BOBO
-
+            
             !xf(1) = xi(2)
             !xf(2) = -SIN(xi(1))
 
