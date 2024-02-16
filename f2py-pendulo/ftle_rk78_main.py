@@ -1,21 +1,10 @@
-#import fortran
 import numpy as np
 import math
 from scipy.linalg import eigvals
-#import fortran
-#import librarykf78
-#import rk4
-#import fortranlibrary
-#print(fortranlibrary.__doc__)
 #import rk4library
 #print(rk4library.__doc__)
-#import rk5teste
-#print(rk5teste.__doc__)
 import rkf78teste
 print(rkf78teste.__doc__)
-#import rk5teste
-#print(novoeispack.__doc__)
-#print(librarykf78.__doc__)
 
 # Define parameters for rkf78
 position = np.zeros(2, dtype=np.float64)
@@ -36,7 +25,6 @@ a = 0.0
 b = 50
 n = 100
 h = (b - a) / n
-#tstep = 0.5
 
 # Define grid parameters
 nx = 128
@@ -54,17 +42,11 @@ del_x = np.array([dist, -dist, 0.0, 0.0, 0.0])
 del_y = np.array([0.0, 0.0, dist, -dist, 0.0])
 
 # Create arrays for x and y coordinates
-#x = np.zeros(nx, dtype=np.float64)
-#y = np.zeros(ny, dtype=np.float64)
-
 x1 = np.zeros((nx, ny, 5))
 y1 = np.zeros((nx, ny, 5))
 
 # Initialize the FTLE (Finite-Time Lyapunov Exponent) array
 sigma = np.zeros((nx, ny))
-
-#relerr = 1.0e-14
-#abserr = 1.0e-14
 
 relerr = [1.0e-14, 1.0e-14]
 abserr = [1.0e-15, 1.0e-15]
@@ -77,81 +59,40 @@ count_del = 1e-5
 # Loop through the grid points
 for i in range(1, nx - 1):
     for j in range(1, ny - 1):
-        #xci = (i - 1) * dx - pi
-        #yci = (j - 1) * dy - pi
         xci = (i) * dx - pi
         yci = (j) * dy - pi
-        #position[0] = (i - 1) * dx - pi
-        #position[1] = (j - 1) * dy - pi
         print("i=",i,"j =", j)  # Print the value of i
-        #input("Press Enter to continue...")
-
+        
         for p in range(5):
             position[0] = xci + del_x[p]
             position[1] = yci + del_y[p]
-            #print(position[0],position[1])
-            #input("Press Enter to continue...")
             t = np.array(a)
-            #iflag = 1
             dt = dt_min
             dtout = np.array(dt_min)
             tnext = np.array(t + dt)
             tfinal = 10
             iflags = np.array(1)
             neqn = np.array(2)
-            #print(t)
             while abs(t) < abs(tfinal):
-                #print("t= ",t,'tnext=',tnext,'dtout=',dtout)
-                #fortranlibrary.rkf78(2,position,t,tnext, relerr,abserr,dtout)
-                #fortranlibrary.rkf78(t, position, dt, tole)
-                #print(position[0],position[1],t)
-                #input("Press Enter to continue...")
-                #fortranlibrary.rk4(t,dt,position)
-                #rk5teste.rkqs(y,x,htry,eps,yscal,hdid,hnext)
-                #hdid = 0.0
-                #hnext = 0.0
-                #rk5teste.rkqs(position,t,dt,abserr,relerr,hdid,hnext)
-                #SUBROUTINE rkf78(NEQN,X,T,TOUT,RELERR,ABSERR,IFLAG,WORK,DT)
                 rkf78teste.rkf78(neqn,position,t,tnext,relerr,abserr,iflags,work,dtout)
-                #print('position1=',position[0],'position2=',position[1])
-                #print("t= ",t,'tnext=',tnext,'dtout=',dtout,'iflag=',iflags)
-                #input("Press Enter to continue...")
-                #print('tnext')
-                #rk4library.rk4(t,dt,position)
-                #print(position[0],position[1],t)
-                #input("Press Enter to continue...")
-                #print(t)
-                #print("t= ",t,"tnext= ", tnext, "dtout= ", dtout)
-                #if ((t + tstep) > b):
-                #    tstep = b - t
-                #rkf78(derivs, neqn, x, t, tout, relerr, abserr, iflag, work, dtout)
-                #rkf78.rkf78(derivs, 2, position, t, tnext, relerr, abserr, iflag, work, dtout)
                 if iflags != 2:
                     print('iflag=', iflags)
                     input("Press Enter to continue...")
                 if abs(dtout)>abs(dt_max):
-                #if abs(hdid)>abs(dt_max):
                      tnext = t + dt_max
-                #     dt = t + dt_max
                 elif abs(dtout)<abs(dt_min):
                     tnext = t + dt_min
                 else:
                      tnext = t + dtout
-                #     dt = t + hdid
                 if abs(tnext)>abs(tfinal):
-                #if abs(dt)>abs(tfinal):
                      tnext = tfinal
-                #t = tnext
-                #print("tempo = ",t,"dt =", dt,"hdid=", hdid,"hnext=",hnext)
+                
             x1[i, j, p] = position[0]
             y1[i, j, p] = position[1]
 
 df = np.zeros((2, 2))  # Jacobian matrix
 df_t = df
 
-
-#print("COMPUTE THE JACOBIAN FLOW AND FTLE")
-#input("Press Enter to continue...")
 for i in range(1, nx - 1):
     for j in range(1, ny - 1):
         print("i=",i,"j =", j)  # Print the value of i
@@ -167,44 +108,31 @@ for i in range(1, nx - 1):
         else:
              sigma[i,j] = np.log(max_dist)/abs(tfinal)
         
-
-        # Teste calculando os auto valores
+        # Calculating th Finite Time Lyapunov Exponent by matrix and eigenvalues
         #df[0, 0] = dist2 * (x1[i, j, 0] - x1[i, j, 1])
         #df[0, 1] = dist2 * (x1[i, j, 2] - x1[i, j, 3])
         #df[1, 0] = dist2 * (y1[i, j, 0] - y1[i, j, 1])
         #df[1, 1] = dist2 * (y1[i, j, 2] - y1[i, j, 3])
         #df_t = np.transpose(df)
         #result_matrix = np.dot(df_t, df)
-        #result_matrix_size = np.shape(result_matrix)
-        #print("Size of result_matrix:", result_matrix_size)
-        # Print the values of result_matrix
-        #print("Values of result_matrix:")
-        #for row in result_matrix:
-        #    print(row)
-        #input("Press Enter to continue...")
         #eigenvalues = eigvals(result_matrix)
         #max_lambda = np.max(eigenvalues)
-
-        #teste eispack
-        #novoeispack.rg(2,result_matrix,wr,wi,matz,eigvec,ierr)
-        #lambda1 = wr
-        #max_lambda=lambda1(0)
-
         #if max_lambda <= 0:
         #    sigma[i, j] = 0.0
         #else:
         #    sigma[i, j] = (np.log(np.sqrt(max_lambda)).real)/abs(tfinal)
 
-# The rest of your code for saving data remains the same.
+#################################################################################
+# Save the data
 
-# Load sigma.data, process data, and create visualizations as needed.
-
-
+# Save data by columns
 #with open("matrix5.dat", "w") as data_file:
 #    for i in range(1, nx):
 #        for j in range(1, ny):
 #        		formatted_data = "{:16.8e} {:16.8e} {:16.8e} {:16.8e} {:16.8e} {:16.8e} {:16.8e} {:16.8e}".format(x1[i,j,0],x1[i,j,1],x1[i,j,2],x1[i,j,3],y1[i,j,0],y1[i,j,1],y1[i,j,2],y1[i,j,3])
 #        		data_file.write(formatted_data + "\n")
+
+# Save the initial contidions of the central point of the grid
 
 with open("ics.data", "w") as data_file:
     for i in range(1, nx - 1):
@@ -214,44 +142,8 @@ with open("ics.data", "w") as data_file:
             formatted_data = "{:16.8e} {:16.8e}".format(xci, yci)
             data_file.write(formatted_data + "\n")
 
-#with open("xics.data", "w") as data_file:
-#    for i in range(2, nx - 1):
-#        for j in range(2, ny - 1):
-#            xci = (i - 1) * dx - pi
-#            yci = (j - 1) * dy - pi
-#            formatted_data = "{:16.8e} {:16.8e} {:16.8e} {:16.8e}".format(xci+del_x[0],xci+del_x[1],xci+del_x[2],xci+del_x[3])
-#            data_file.write(formatted_data + "\n")
-        
-#with open("yics.data", "w") as data_file:
-#    for i in range(2, nx - 1):
-#        for j in range(2, ny - 1):
-#            xci = (i - 1) * dx - pi
-#            yci = (j - 1) * dy - pi
-#            formatted_data = "{:16.8e} {:16.8e} {:16.8e} {:16.8e}".format(yci+del_x[0],yci+del_x[1],yci+del_x[2],yci+del_x[3])
-#            data_file.write(formatted_data + "\n")
-
-# Save the data to a .data file
-#with open("sigma.data", "w") as data_file:
-#    for i in range(2, nx - 1):
-#        for j in range(2, ny - 1):
-#            xci = (i - 1) * dx - pi
-#            yci = (j - 1) * dy - pi
-#            data = sigma[i - 1, j - 1]
-#            formatted_data = f"{t:16.8e} {xci:16.8e} {yci:16.8e} {data:16.8e}"
-#            data_file.write(formatted_data + "\n")
-
 filename = "output8.data"  # Choose your desired output file name
-
 with open(filename, "w") as file:
     for j in range(ny - 1, 1, -1):
         formatted_data = " ".join([f"{sigma[i][j]:16.8e}" for i in range(nx - 1, 1, -1)])
         file.write(formatted_data + "\n")
-            
-            
-            
-#load sigma.data 
-#x = sigma(:,2);
-#y = sigma(:,3);
-#z = sigma(:,4);
-#intensity = z;
-#imagesc(unique(x), unique(y), reshape(intensity, length(unique(x)), length(unique(y))));
